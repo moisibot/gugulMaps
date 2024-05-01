@@ -11,4 +11,15 @@
         <maven.compiler.target>17</maven.compiler.target>
         <exec.mainClass>com.mycompany.finaledd.FinalEdd</exec.mainClass>
     </properties>
+    <dependencies>
+
+    <dependency>
+        <groupId>com.randomnoun.maven.plugins</groupId>
+            <artifactId>java-to-graphviz-maven-plugin</artifactId>
+            <version>1.0.4</version>
+            <type>maven-plugin</type>
+    </dependency>
+</dependencies>
+
+
 </project>
