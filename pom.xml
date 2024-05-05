@@ -18,6 +18,7 @@
             <artifactId>java-to-graphviz-maven-plugin</artifactId>
             <version>1.0.4</version>
             <type>maven-plugin</type>
+          
     </dependency>
 </dependencies>
 
