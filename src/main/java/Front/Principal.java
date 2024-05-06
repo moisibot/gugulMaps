@@ -556,16 +556,11 @@ JFileChooser fileChooser = new JFileChooser();
 
     private void OrigenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OrigenActionPerformed
         // TODO add your handling code here:
-        String origenSeleccionado = (String) Origen.getSelectedItem();
-    String destinoSeleccionado = (String) Destino.getSelectedItem();
-    graficar(distancias, grafo, origenSeleccionado, destinoSeleccionado);
     }//GEN-LAST:event_OrigenActionPerformed
 
     private void DestinoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DestinoActionPerformed
         // TODO add your handling code here:
-        String origenSeleccionado = (String) Origen.getSelectedItem();
-    String destinoSeleccionado = (String) Destino.getSelectedItem();
-    graficar(distancias, grafo, origenSeleccionado, destinoSeleccionado);
+ 
     }//GEN-LAST:event_DestinoActionPerformed
 
     private void OpcionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OpcionesActionPerformed
@@ -626,15 +621,18 @@ JFileChooser fileChooser = new JFileChooser();
 }
 
     private List<List<String>> calcularRutasPosibles(String origen) {
-    List<List<String>> rutasPosibles = new ArrayList<>();
+   List<List<String>> rutasPosibles = new ArrayList<>();
+    Map<String, Integer> distancias = grafo.dijkstra(origen);
+    for (String destino : grafo.obtenerNodos()) {
+        if (!destino.equals(origen)) { 
+            Ruta ruta = calcularRutaMasCorta(origen, destino);
+            if (ruta != null) {
+                rutasPosibles.add(ruta.getNodosIntermedio());
 
-    // Calcular todas las rutas posibles desde el origen utilizando el algoritmo de tu preferencia
-    // Por ejemplo, puedes utilizar el algoritmo de Dijkstra o cualquier otro método
-    // Aquí debes implementar la lógica para calcular las rutas utilizando el grafo y los datos de los archivos de entrada
-
-    // Agrega las rutas calculadas a la lista rutasPosibles
-
-    return rutasPosibles;
+            }
+        }
+    }
+     return rutasPosibles;
     }//GEN-LAST:event_ArbolActionPerformed
 
     private void actualizarControlReloj() {
@@ -742,45 +740,44 @@ JFileChooser fileChooser = new JFileChooser();
         }
     }
 
-     public Ruta calcularRutaMasCorta(String origen, String destino) {
-            Map<String, Integer> distancias = new HashMap<>();
-            Map<String, String> previos = new HashMap<>();
-            Set<String> nodosVisitados = new HashSet<>();
+  public Ruta calcularRutaMasCorta(String origen, String destino) {
+    Map<String, Integer> distancias = new HashMap<>();
+    Map<String, String> previos = new HashMap<>();
+    Set<String> nodosVisitados = new HashSet<>();
 
-            // Inicializar todas las distancias con infinito, excepto el nodo de origen
-            for (String nodo : grafo.obtenerNodos()) {
-                distancias.put(nodo, Integer.MAX_VALUE);
-            }
-            distancias.put(origen, 0);
+    for (String nodo : grafo.obtenerNodos()) {
+        distancias.put(nodo, Integer.MAX_VALUE);
+    }
+    distancias.put(origen, 0);
 
-            // Algoritmo de Dijkstra
-            while (!nodosVisitados.contains(destino)) {
-                String nodoActual = obtenerNodoMasCercano(distancias, nodosVisitados);
-                if (nodoActual == null) {
-                    // No existe ruta desde el origen al destino
-                    return null;
-                }
-                nodosVisitados.add(nodoActual);
-
-                for (String vecino : grafo.obtenerNodosAdyacentes(nodoActual)) {
-                    int pesoArista = grafo.obtenerPeso(nodoActual, vecino);
-                    int distanciaActual = distancias.get(nodoActual) + pesoArista;
-
-                    if (distanciaActual < distancias.get(vecino)) {
-                        distancias.put(vecino, distanciaActual);
-                        previos.put(vecino, nodoActual);
-                    }
-                }
-            }
-            LinkedList<String> rutaNodos = new LinkedList<>();
-            String nodoActual = destino;
-            while (previos.containsKey(nodoActual)) {
-                rutaNodos.addFirst(nodoActual);
-                nodoActual = previos.get(nodoActual);
-            }
-            rutaNodos.addFirst(origen);
-            return new Ruta(origen, destino, rutaNodos, distancias.get(destino));
+    // el mero perro algoritmo de Dijkstra
+    while (!nodosVisitados.contains(destino)) {
+        String nodoActual = obtenerNodoMasCercano(distancias, nodosVisitados);
+        if (nodoActual == null) {
+            return null;
         }
+        nodosVisitados.add(nodoActual);
+
+        for (String vecino : grafo.obtenerNodosAdyacentes(nodoActual)) {
+            int pesoArista = grafo.obtenerPeso(nodoActual, vecino);
+            int distanciaActual = distancias.get(nodoActual) + pesoArista;
+
+            if (distanciaActual < distancias.get(vecino)) {
+                distancias.put(vecino, distanciaActual);
+                previos.put(vecino, nodoActual);
+            }
+        }
+    }
+
+    LinkedList<String> rutaNodos = new LinkedList<>();
+    String nodoActual = destino;
+    while (previos.containsKey(nodoActual)) {
+        rutaNodos.addFirst(nodoActual);
+        nodoActual = previos.get(nodoActual);
+    }
+    rutaNodos.addFirst(origen);
+    return new Ruta(origen, destino, rutaNodos, distancias.get(destino));
+}
 
      private String obtenerNodoMasCercano(Map<String, Integer> distancias, Set<String> nodosVisitados) {
             int distanciaMasCercana = Integer.MAX_VALUE;

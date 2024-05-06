@@ -5,64 +5,45 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-// Clase principal del árbol B
 public class ArbolB {
-    private NodoArbolB raiz; // Puntero a la raíz del árbol
-    private int orden; // Orden del árbol B
+    private NodoArbolB raiz; 
+    private int orden; 
 
-    // Constructor para crear un árbol B vacío con un orden dado
     public ArbolB(int ordenArbol) {
         raiz = null;
         orden = ordenArbol;
     }
 
-    // Función para buscar una clave en el árbol B
     public List<String> buscar(int clave) {
         return buscarRecursivo(clave, raiz);
     }
 
-    // Función recursiva para buscar una clave en el árbol B
     private List<String> buscarRecursivo(int clave, NodoArbolB nodo) {
         List<String> ruta = new ArrayList<>();
         int i = 0;
-
-        // Si el nodo es nulo, la clave no se encuentra en el árbol
         if (nodo == null) {
             return ruta;
         }
-
-        // Buscar la posición de la clave en el nodo
         while (i < nodo.numClaves && clave > nodo.claves[i]) {
             i++;
         }
-
-        // Si la clave se encuentra en el nodo
         if (i < nodo.numClaves && clave == nodo.claves[i]) {
-            // Agregar los nodos de la ruta a la lista
             ruta = agregarNodosRuta(nodo, ruta);
             return ruta;
         }
-
-        // Si el nodo es una hoja, la clave no se encuentra en el árbol
         if (nodo.hojaNodo) {
             return ruta;
         }
-
-        // Buscar en el hijo apropiado
         return buscarRecursivo(clave, nodo.hijos[i]);
     }
-
-    // Función para agregar los nodos de una ruta a una lista
+    
     private List<String> agregarNodosRuta(NodoArbolB nodo, List<String> ruta) {
         if (nodo.hojaNodo) {
-            // Si es una hoja, agregar los nodos de la ruta a la lista
             for (int i = 0; i < nodo.numClaves; i++) {
                 ruta.add(String.valueOf(nodo.claves[i]));
             }
             return ruta;
         }
-
-        // Recorrer los hijos del nodo
         for (int i = 0; i <= nodo.numClaves; i++) {
             if (nodo.hijos[i] != null) {
                 ruta = agregarNodosRuta(nodo.hijos[i], ruta);
@@ -72,7 +53,6 @@ public class ArbolB {
         return ruta;
     }
 
-    // Método para insertar una ruta en el árbol B
     public void insertar(int idRuta, LinkedList<String> ruta) {
         if (raiz == null) {
             raiz = new NodoArbolB(orden, true);
@@ -95,7 +75,6 @@ public class ArbolB {
         }
     }
 
-    // Método auxiliar para insertar en un nodo no lleno
     private void insertarNoLleno(NodoArbolB nodo, int idRuta, LinkedList<String> ruta) {
         int i = nodo.numClaves - 1;
         if (nodo.hojaNodo) {
@@ -120,7 +99,6 @@ public class ArbolB {
         }
     }
 
-    // Método para dividir un nodo hijo
     private void dividirHijo(NodoArbolB padre, int indice, NodoArbolB hijo) {
         NodoArbolB nuevoNodo = new NodoArbolB(hijo.orden, hijo.hojaNodo);
         nuevoNodo.numClaves = orden - 1;
@@ -144,7 +122,6 @@ public class ArbolB {
         padre.numClaves++;
     }
 
-    // Método para generar el código DOT del árbol B
     public String generarCodigoDot() {
         StringBuilder dotBuilder = new StringBuilder();
         dotBuilder.append("digraph ArbolB {\n");
@@ -154,7 +131,6 @@ public class ArbolB {
         return dotBuilder.toString();
     }
 
-    // Método auxiliar recursivo para generar el código DOT
     private void generarCodigoDotRecursivo(NodoArbolB nodo, StringBuilder dotBuilder) {
         if (nodo != null) {
             dotBuilder.append("\tnodo").append(nodo.hashCode()).append(" [label=\"");
