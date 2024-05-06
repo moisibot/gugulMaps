@@ -1,5 +1,6 @@
 Front/Principal$9.class
 Front/Principal$4.class
+CosasExtra/NodoGrafo.class
 CosasExtra/Reloj$1.class
 CosasExtra/Graficador.class
 CosasExtra/ArbolB.class
@@ -8,6 +9,7 @@ Front/Principal$6.class
 Front/Principal$10.class
 CosasExtra/ProcesadorDeArchivos.class
 CosasExtra/Nodo.class
+Front/Principal$15.class
 CosasExtra/TrafficInfo.class
 Front/Principal$3.class
 CosasExtra/GrafoDirigidoPonderado.class
@@ -16,7 +18,9 @@ Front/Principal$8.class
 Front/Principal.class
 Front/Principal$12.class
 CosasExtra/Reloj.class
+CosasExtra/GrafoVisual$NodoVisual.class
 Front/Principal$1.class
+CosasExtra/GrafoVisual.class
 CosasExtra/Ruta.class
 Front/Principal$5.class
 CosasExtra/NodoArbolB.class

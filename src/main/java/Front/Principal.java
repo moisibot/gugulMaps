@@ -23,6 +23,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import CosasExtra.GrafoDirigidoPonderado;
+import CosasExtra.GrafoVisual;
+import CosasExtra.NodoGrafo;
 import CosasExtra.Ruta;
 import java.awt.Color;
 import java.awt.Image;
@@ -31,18 +33,24 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.LinkedList;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import javax.swing.Timer;
 import javax.swing.filechooser.FileNameExtensionFilter;
 public class Principal extends javax.swing.JFrame {
+    private Map<String, NodoGrafo> nodos = new HashMap<>();
+private JPanel panelGrafo;
     private Reloj reloj;
     private Timer timer;
     private List<String[]> datos;
+    private GrafoVisual grafoVisual;
     private Map<String, Map<String, Map<String, Integer>>> distancias = new HashMap<>();
         GrafoDirigidoPonderado grafo = new GrafoDirigidoPonderado();
  public Principal() {
         initComponents();
+        grafoVisual = new GrafoVisual();
+         Graficas.add(grafoVisual);
          grafo = new GrafoDirigidoPonderado();
         Origen.removeAllItems();
         Destino.removeAllItems();
@@ -58,6 +66,12 @@ public class Principal extends javax.swing.JFrame {
             }        
         });
         timer.start(); 
+        for (String nombreNodo : grafo.obtenerNodos()) {
+    NodoGrafo nodoGrafo = new NodoGrafo(nombreNodo);
+    nodos.put(nombreNodo, nodoGrafo);
+    panelGrafo.add(nodoGrafo);
+}
+
     }
     
     
@@ -160,6 +174,11 @@ public class Principal extends javax.swing.JFrame {
         jLabel5.setText("gasto fisico:");
 
         SiguienteCamino.setText("siguiente camino");
+        SiguienteCamino.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SiguienteCaminoActionPerformed(evt);
+            }
+        });
 
         jLabel6.setText("gas-distancia:");
 
@@ -503,11 +522,10 @@ public class Principal extends javax.swing.JFrame {
             }
             reader.close();
 String origenSeleccionado = (String) Origen.getSelectedItem();
-            String destinoSeleccionado = (String) Destino.getSelectedItem();
-
-            // Realizar el graficado con los nodos de origen y destino seleccionados
-            graficar(distancias, grafo, origenSeleccionado, destinoSeleccionado);
-            mostrarImagen("/home/moisibot/NetBeansProjects/FinalEdd/graph.png"); 
+String destinoSeleccionado = (String) Destino.getSelectedItem();
+List<String> nodosRuta = new ArrayList<>(); 
+graficar(distancias, grafo, origenSeleccionado, destinoSeleccionado, nodosRuta);
+mostrarImagen("/home/moisibot/NetBeansProjects/FinalEdd/graph.png");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -579,11 +597,9 @@ JFileChooser fileChooser = new JFileChooser();
         Fisico.setText("");
         Distancia.setText("");
     }
-
-    // Realizar el graficado con los nodos de origen y destino seleccionados
-    String origenSeleccionado = (String) Origen.getSelectedItem();
-    String destinoSeleccionado = (String) Destino.getSelectedItem();
-    graficar(distancias, grafo, origenSeleccionado, destinoSeleccionado);
+  Ruta rutaMasCorta = calcularRutaMasCorta(origen, destino);
+    List<String> nodosRuta = rutaMasCorta.getNodosIntermedio();
+     graficar(distancias, grafo, origen, destino, nodosRuta);
     }//GEN-LAST:event_OpcionesActionPerformed
 
     private void GasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GasActionPerformed
@@ -601,22 +617,14 @@ JFileChooser fileChooser = new JFileChooser();
     private void ArbolActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ArbolActionPerformed
         
         ArbolB arbolB = new ArbolB(5);
-
-    // Obtener el nodo de origen seleccionado
     String origenSeleccionado = (String) Origen.getSelectedItem();
-
-    // Calcular las rutas posibles desde el origen seleccionado
     List<List<String>> rutasPosibles = calcularRutasPosibles(origenSeleccionado);
-
-    // Insertar las rutas en el Árbol B
     int idRuta = 1;
     for (List<String> ruta : rutasPosibles) {
         LinkedList<String> rutaLinked = new LinkedList<>(ruta);
         arbolB.insertar(idRuta, rutaLinked);
         idRuta++;
     }
-
-    // Graficar el Árbol B
     graficarArbolB(arbolB);
 }
 
@@ -635,17 +643,69 @@ JFileChooser fileChooser = new JFileChooser();
      return rutasPosibles;
     }//GEN-LAST:event_ArbolActionPerformed
 
+    private void SiguienteCaminoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SiguienteCaminoActionPerformed
+       String origen = (String) Origen.getSelectedItem();
+       String destino = (String) Destino.getSelectedItem();
+    
+    if (origen != null && destino != null) {
+        NodoGrafo nodoGrafoOrigen = nodos.get(origen);
+        NodoGrafo nodoGrafoDestino = nodos.get(destino);
+        
+        if (nodoGrafoOrigen != null && nodoGrafoDestino != null) {
+            
+              Ruta rutaMasCorta = calcularRutaMasCorta(origen, destino);
+        List<String> nodosRuta = rutaMasCorta.getNodosIntermedio();
+            
+            for (NodoGrafo nodoGrafo : nodos.values()) {
+                nodoGrafo.setEsOrigen(false);
+                nodoGrafo.setEsDestino(false);
+            }
+            nodoGrafoOrigen.setEsOrigen(true);
+            for (int i = 0; i < nodosRuta.size(); i++) {
+                String nodoActual = nodosRuta.get(i);
+                NodoGrafo nodoGrafo = nodos.get(nodoActual);
+                if (nodoGrafo != null) {
+                    nodoGrafo.repaint();
+                    try {
+                        Thread.sleep(1000); 
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+              grafoVisual.resaltarOrigen(origen);
+        grafoVisual.resaltarDestino(destino);
+        grafoVisual.resaltarRuta(nodosRuta);
+            nodoGrafoDestino.setEsDestino(true);
+            nodoGrafoDestino.repaint();
+
+            graficar(distancias, grafo, origen, destino, nodosRuta);
+        } else {
+            System.out.println("Uno o ambos nodos (origen o destino) no se encontraron en el grafo.");
+        }
+    } else {
+        System.out.println("No se ha seleccionado un origen y/o destino válido.");
+    }
+    }//GEN-LAST:event_SiguienteCaminoActionPerformed
+
     private void actualizarControlReloj() {
         ControlReloj.setText(reloj.obtenerHoraActual());
     }
 
-    private void graficar(Map<String, Map<String, Map<String, Integer>>> distancias, GrafoDirigidoPonderado grafo, String origenSeleccionado, String destinoSeleccionado) {
+   private void graficar(Map<String, Map<String, Map<String, Integer>>> distancias, GrafoDirigidoPonderado grafo, String origenSeleccionado, String destinoSeleccionado, List<String> nodosRuta) {
         StringBuilder dotSource = new StringBuilder();
         dotSource.append("digraph G {\n"); 
         dotSource.append("  rankdir=LR;\n");
       dotSource.append("  node [shape=oval, style=filled, color=lightgray];\n");
-
-      // Construir la estructura de niveles (remains for potential future use)
+      // Resaltar los nodos de la ruta
+dotSource.append("  node [style=filled, color=lightgray];\n"); 
+dotSource.append("  \"" + origenSeleccionado + "\" [color=red];\n"); 
+dotSource.append("  \"" + destinoSeleccionado + "\" [color=blue];\n"); 
+for (String nodo : nodosRuta) {
+    if (!nodo.equals(origenSeleccionado) && !nodo.equals(destinoSeleccionado)) {
+        dotSource.append("  \"" + nodo + "\" [color=orange];\n"); 
+    }
+}
       Map<Integer, List<String>> nivelesNodos = new HashMap<>();
       for (String nodo : grafo.obtenerNodos()) {
         int nivel = calcularNivel(nodo, origenSeleccionado);
@@ -658,8 +718,6 @@ JFileChooser fileChooser = new JFileChooser();
       for (String nodo : grafo.obtenerNodos()) {
         dotSource.append("  \"" + nodo + "\";\n");
       }
-
-      // Generate code DOT for edges with labels
       for (String origen : distancias.keySet()) {
         for (String destino : distancias.get(origen).keySet()) {
           Map<String, Integer> info = distancias.get(origen).get(destino);
@@ -672,9 +730,7 @@ JFileChooser fileChooser = new JFileChooser();
           dotSource.append("  \"" + origen + "\" -> \"" + destino + "\" [label=\"" + label + "\"];\n");
         }
       }
-
       dotSource.append("}\n");
-
         try {
             File tempFile = File.createTempFile("graph", ".dot");
             BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile));
@@ -693,7 +749,7 @@ JFileChooser fileChooser = new JFileChooser();
     private void cargarImagenGrafo() {
         try {
             ImageIcon icon = new ImageIcon("graph.png");
-            Graficas.removeAll(); // Limpiar el panel antes de agregar la nueva imagen
+            Graficas.removeAll(); 
             Graficas.setLayout(new BorderLayout());
             JScrollPane scrollPane = new JScrollPane();
             JLabel labelImagen = new JLabel(icon);
@@ -717,19 +773,15 @@ JFileChooser fileChooser = new JFileChooser();
         Graficas.add(imagenLabel); 
         Graficas.revalidate(); 
         Graficas.repaint(); 
+        
     }
 
     private void generarImagenDesdeDot(String nombreArchivoDot, String nombreImagen) {
-        // Comando para ejecutar Graphviz y generar la imagen
         String comandoDot = String.format("dot -Tpng -o %s.png %s", nombreImagen, nombreArchivoDot);
 
         try {
-            // Ejecutar el comando en el sistema
             Process proceso = Runtime.getRuntime().exec(comandoDot);
-
-            // Esperar a que el proceso termine
             int exitVal = proceso.waitFor();
-
             if (exitVal == 0) {
                 System.out.println("Imagen generada correctamente: " + nombreImagen);
             } else {
@@ -794,22 +846,17 @@ JFileChooser fileChooser = new JFileChooser();
             return nodoMasCercano;
         }
 
-    private int calcularNivel(String nodo, String origen) { // Corrección 2
+    private int calcularNivel(String nodo, String origen) { 
         Map<String, Integer> distancias = new HashMap<>();
         Map<String, String> previos = new HashMap<>();
         Set<String> nodosVisitados = new HashSet<>();
-
-        // Inicializar todas las distancias con infinito, excepto el nodo de origen
         for (String n : grafo.obtenerNodos()) {
             distancias.put(n, Integer.MAX_VALUE);
         }
         distancias.put(origen, 0);
-
-        // Algoritmo de Dijkstra para calcular las distancias
         while (!nodosVisitados.contains(nodo)) {
             String nodoActual = obtenerNodoMasCercano(distancias, nodosVisitados);
             if (nodoActual == null) {
-                // No existe ruta desde el origen al destino
                 return -1;
             }
             nodosVisitados.add(nodoActual);
@@ -828,8 +875,7 @@ JFileChooser fileChooser = new JFileChooser();
         return distancias.get(nodo); // Corrección 2
     }
    
-    private void graficarArbolB(ArbolB arbolB) {
-    // Generar el código DOT para representar el Árbol B
+  private void graficarArbolB(ArbolB arbolB) {
     String dotSource = arbolB.generarCodigoDot();
 
     try {
@@ -838,17 +884,21 @@ JFileChooser fileChooser = new JFileChooser();
         writer.write(dotSource);
         writer.close();
 
-        // Ejecutar el comando Graphviz para generar la imagen del Árbol B
-        ProcessBuilder processBuilder = new ProcessBuilder("dot", "-Tpng", "-o", "arbolB.png", tempFile.getAbsolutePath());
+        // Especificar la ubicación para guardar la imagen del árbol
+        File imageFile = new File("/home/moisibot/NetBeansProjects/FinalEdd/arbolB.png");
+
+        // Utilizar Graphviz para generar la imagen del árbol
+        ProcessBuilder processBuilder = new ProcessBuilder("dot", "-Tpng", "-o", imageFile.getAbsolutePath(), tempFile.getAbsolutePath());
         Process process = processBuilder.start();
         process.waitFor();
 
-        // Mostrar la imagen del Árbol B en el panel correspondiente
-        mostrarImagen("/path/to/arbolB.png");
+        // Mostrar la imagen en tu aplicación (opcional)
+        mostrarImagen(imageFile.getAbsolutePath());
     } catch (IOException | InterruptedException e) {
         e.printStackTrace();
     }
 }
+
 
 
 
