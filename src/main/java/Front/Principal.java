@@ -1,5 +1,6 @@
 package Front;
 
+import CosasExtra.ArbolB;
 import CosasExtra.Reloj;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -35,8 +36,6 @@ import javax.swing.JScrollPane;
 import javax.swing.Timer;
 import javax.swing.filechooser.FileNameExtensionFilter;
 public class Principal extends javax.swing.JFrame {
-private final Color colorOrigen = Color.BLUE;
-private final Color colorDestino = Color.RED;
     private Reloj reloj;
     private Timer timer;
     private List<String[]> datos;
@@ -45,7 +44,6 @@ private final Color colorDestino = Color.RED;
  public Principal() {
         initComponents();
          grafo = new GrafoDirigidoPonderado();
-        
         Origen.removeAllItems();
         Destino.removeAllItems();
         //se utliza el field para comenzar el reloj
@@ -57,13 +55,9 @@ private final Color colorDestino = Color.RED;
                     reloj.avanzarTiempo();
                     actualizarControlReloj();
                 }
-            }
-            
+            }        
         });
-        //al ejecutar se pouede usar el timer para no inicarlo manualmente
         timer.start(); 
-        
-        
     }
     
     
@@ -96,9 +90,9 @@ private final Color colorDestino = Color.RED;
         Reanudar = new javax.swing.JButton();
         ControlReloj = new javax.swing.JTextField();
         Aplicar = new javax.swing.JButton();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
+        Gas = new javax.swing.JTextField();
+        Fisico = new javax.swing.JTextField();
+        Distancia = new javax.swing.JTextField();
         Archivo2 = new javax.swing.JButton();
         Graficas = new javax.swing.JPanel();
         Opciones = new javax.swing.JComboBox<>();
@@ -172,6 +166,11 @@ private final Color colorDestino = Color.RED;
         VerDatos.setText("ver datos");
 
         Arbol.setText("Arbol");
+        Arbol.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ArbolActionPerformed(evt);
+            }
+        });
 
         NuevoViaje.setText("Nuevo viaje");
 
@@ -206,6 +205,24 @@ private final Color colorDestino = Color.RED;
         Aplicar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 AplicarActionPerformed(evt);
+            }
+        });
+
+        Gas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                GasActionPerformed(evt);
+            }
+        });
+
+        Fisico.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                FisicoActionPerformed(evt);
+            }
+        });
+
+        Distancia.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                DistanciaActionPerformed(evt);
             }
         });
 
@@ -302,9 +319,9 @@ private final Color colorDestino = Color.RED;
                                 .addComponent(VerDatos))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(Gas, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(Fisico, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(Distancia, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(18, 18, 18)
                                 .addComponent(Historial, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -333,30 +350,24 @@ private final Color colorDestino = Color.RED;
                                     .addComponent(jLabel1)
                                     .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel3)
-                                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(Archivo))
                                 .addGap(18, 18, 18)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                .addComponent(jLabel2)
-                                                .addComponent(Archivo2))
-                                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                .addComponent(Destino, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addComponent(jLabel4))
-                                            .addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGap(18, 18, 18)
-                                        .addComponent(SiguienteCamino))))
+                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(jLabel2)
+                                        .addComponent(Archivo2))
+                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(Destino, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jLabel4))
+                                    .addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)
+                                .addComponent(SiguienteCamino))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                     .addComponent(jLabel6)
                                     .addComponent(Opciones, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel7))
+                                    .addComponent(jLabel7)
+                                    .addComponent(Gas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(18, 18, 18)
                                 .addComponent(jLabel5)
                                 .addGap(18, 18, 18)
@@ -369,12 +380,17 @@ private final Color colorDestino = Color.RED;
                             .addComponent(Reanudar)
                             .addComponent(Aplicar)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(Historial, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(Historial, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(Fisico, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(VerDatos)
                             .addComponent(Arbol)
-                            .addComponent(NuevoViaje))))
+                            .addComponent(NuevoViaje)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(100, 100, 100)
+                        .addComponent(Distancia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
                 .addComponent(Graficas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
@@ -553,42 +569,293 @@ JFileChooser fileChooser = new JFileChooser();
     }//GEN-LAST:event_DestinoActionPerformed
 
     private void OpcionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OpcionesActionPerformed
-        // TODO add your handling code here:
-        String origen = (String) Origen.getSelectedItem();
+    String origen = (String) Origen.getSelectedItem();
     String destino = (String) Destino.getSelectedItem();
-    Ruta rutaMasCorta = calcularRutaMasCorta(origen, destino);
-    Opciones.removeAllItems();
 
-    if (rutaMasCorta != null) {
-        // Agregar la ruta más corta al combo box
-        Opciones.addItem("Ruta más corta desde " + origen + " hasta " + destino + ":");
+    if (distancias.containsKey(origen) && distancias.get(origen).containsKey(destino)) {
+        Map<String, Integer> info = distancias.get(origen).get(destino);
 
-        // Obtener los nodos intermedios y la distancia
-        List<String> nodosIntermedio = rutaMasCorta.getNodosIntermedio();
-        int distancia = rutaMasCorta.getDistancia();
-
-        // Agregar los nodos intermedios y la distancia al combo box
-        StringBuilder rutaStringBuilder = new StringBuilder();
-        for (String nodo : nodosIntermedio) {
-            rutaStringBuilder.append(nodo).append(" -> ");
-        }
-        rutaStringBuilder.append("Distancia: ").append(distancia);
-        Opciones.addItem(rutaStringBuilder.toString());
+        // Mostrar los valores en los campos correspondientes
+        Gas.setText(String.valueOf(info.get("consumoGas")));
+        Fisico.setText(String.valueOf(info.get("desgastePersona")));
+        Distancia.setText(String.valueOf(info.get("distancia")));
     } else {
-        // Si no hay ruta, agregar un mensaje al combo box
-        Opciones.addItem("No existe una ruta desde " + origen + " hasta " + destino);
+        Gas.setText("");
+        Fisico.setText("");
+        Distancia.setText("");
     }
-String origenSeleccionado = (String) Origen.getSelectedItem();
-            String destinoSeleccionado = (String) Destino.getSelectedItem();
 
-            // Realizar el graficado con los nodos de origen y destino seleccionados
-            graficar(distancias, grafo, origenSeleccionado, destinoSeleccionado);
+    // Realizar el graficado con los nodos de origen y destino seleccionados
+    String origenSeleccionado = (String) Origen.getSelectedItem();
+    String destinoSeleccionado = (String) Destino.getSelectedItem();
+    graficar(distancias, grafo, origenSeleccionado, destinoSeleccionado);
     }//GEN-LAST:event_OpcionesActionPerformed
+
+    private void GasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GasActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_GasActionPerformed
+
+    private void FisicoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FisicoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_FisicoActionPerformed
+
+    private void DistanciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DistanciaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_DistanciaActionPerformed
+
+    private void ArbolActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ArbolActionPerformed
+        
+        ArbolB arbolB = new ArbolB(5);
+
+    // Obtener el nodo de origen seleccionado
+    String origenSeleccionado = (String) Origen.getSelectedItem();
+
+    // Calcular las rutas posibles desde el origen seleccionado
+    List<List<String>> rutasPosibles = calcularRutasPosibles(origenSeleccionado);
+
+    // Insertar las rutas en el Árbol B
+    int idRuta = 1;
+    for (List<String> ruta : rutasPosibles) {
+        LinkedList<String> rutaLinked = new LinkedList<>(ruta);
+        arbolB.insertar(idRuta, rutaLinked);
+        idRuta++;
+    }
+
+    // Graficar el Árbol B
+    graficarArbolB(arbolB);
+}
+
+    private List<List<String>> calcularRutasPosibles(String origen) {
+    List<List<String>> rutasPosibles = new ArrayList<>();
+
+    // Calcular todas las rutas posibles desde el origen utilizando el algoritmo de tu preferencia
+    // Por ejemplo, puedes utilizar el algoritmo de Dijkstra o cualquier otro método
+    // Aquí debes implementar la lógica para calcular las rutas utilizando el grafo y los datos de los archivos de entrada
+
+    // Agrega las rutas calculadas a la lista rutasPosibles
+
+    return rutasPosibles;
+    }//GEN-LAST:event_ArbolActionPerformed
 
     private void actualizarControlReloj() {
         ControlReloj.setText(reloj.obtenerHoraActual());
     }
-    
+
+    private void graficar(Map<String, Map<String, Map<String, Integer>>> distancias, GrafoDirigidoPonderado grafo, String origenSeleccionado, String destinoSeleccionado) {
+        StringBuilder dotSource = new StringBuilder();
+        dotSource.append("digraph G {\n"); 
+        dotSource.append("  rankdir=LR;\n");
+      dotSource.append("  node [shape=oval, style=filled, color=lightgray];\n");
+
+      // Construir la estructura de niveles (remains for potential future use)
+      Map<Integer, List<String>> nivelesNodos = new HashMap<>();
+      for (String nodo : grafo.obtenerNodos()) {
+        int nivel = calcularNivel(nodo, origenSeleccionado);
+        if (!nivelesNodos.containsKey(nivel)) {
+          nivelesNodos.put(nivel, new ArrayList<>());
+        }
+        nivelesNodos.get(nivel).add(nodo);
+      }
+
+      for (String nodo : grafo.obtenerNodos()) {
+        dotSource.append("  \"" + nodo + "\";\n");
+      }
+
+      // Generate code DOT for edges with labels
+      for (String origen : distancias.keySet()) {
+        for (String destino : distancias.get(origen).keySet()) {
+          Map<String, Integer> info = distancias.get(origen).get(destino);
+          int tiempoVehiculo = info.get("tiempoVehiculo");
+          int tiempoPie = info.get("tiempoPie");
+          int consumoGas = info.get("consumoGas");
+          int desgastePersona = info.get("desgastePersona");
+          int distancia = info.get("distancia");
+          String label = "Tiempo (vehículo): " + tiempoVehiculo + "\\nTiempo (pie): " + tiempoPie + "\\nConsumo de gas: " + consumoGas + "\\nDesgaste persona: " + desgastePersona + "\\nDistancia: " + distancia;
+          dotSource.append("  \"" + origen + "\" -> \"" + destino + "\" [label=\"" + label + "\"];\n");
+        }
+      }
+
+      dotSource.append("}\n");
+
+        try {
+            File tempFile = File.createTempFile("graph", ".dot");
+            BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile));
+            writer.write(dotSource.toString());
+            writer.close();
+
+            ProcessBuilder processBuilder = new ProcessBuilder("dot", "-Tpng", "-o", "graph.png", tempFile.getAbsolutePath());
+            Process process = processBuilder.start();
+            process.waitFor();
+            cargarImagenGrafo();
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void cargarImagenGrafo() {
+        try {
+            ImageIcon icon = new ImageIcon("graph.png");
+            Graficas.removeAll(); // Limpiar el panel antes de agregar la nueva imagen
+            Graficas.setLayout(new BorderLayout());
+            JScrollPane scrollPane = new JScrollPane();
+            JLabel labelImagen = new JLabel(icon);
+            scrollPane.setViewportView(labelImagen);
+            Graficas.add(scrollPane, BorderLayout.CENTER);
+            Graficas.revalidate();
+            Graficas.repaint();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void mostrarImagen(String rutaImagen) {
+        ImageIcon imagenIcono = new ImageIcon(rutaImagen);
+        Image imagen = imagenIcono.getImage(); 
+        //aquii se muestra la imagen de los grafos en el panel
+        Image imagenRedimensionada = imagen.getScaledInstance(669, 1456, Image.SCALE_SMOOTH);
+        ImageIcon imagenRedimensionadaIcono = new ImageIcon(imagenRedimensionada); 
+        JLabel imagenLabel = new JLabel(imagenRedimensionadaIcono); 
+        Graficas.removeAll(); 
+        Graficas.add(imagenLabel); 
+        Graficas.revalidate(); 
+        Graficas.repaint(); 
+    }
+
+    private void generarImagenDesdeDot(String nombreArchivoDot, String nombreImagen) {
+        // Comando para ejecutar Graphviz y generar la imagen
+        String comandoDot = String.format("dot -Tpng -o %s.png %s", nombreImagen, nombreArchivoDot);
+
+        try {
+            // Ejecutar el comando en el sistema
+            Process proceso = Runtime.getRuntime().exec(comandoDot);
+
+            // Esperar a que el proceso termine
+            int exitVal = proceso.waitFor();
+
+            if (exitVal == 0) {
+                System.out.println("Imagen generada correctamente: " + nombreImagen);
+            } else {
+                JOptionPane.showMessageDialog(null, "Error al generar la imagen. Código de salida: " + exitVal);
+            }
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+     public Ruta calcularRutaMasCorta(String origen, String destino) {
+            Map<String, Integer> distancias = new HashMap<>();
+            Map<String, String> previos = new HashMap<>();
+            Set<String> nodosVisitados = new HashSet<>();
+
+            // Inicializar todas las distancias con infinito, excepto el nodo de origen
+            for (String nodo : grafo.obtenerNodos()) {
+                distancias.put(nodo, Integer.MAX_VALUE);
+            }
+            distancias.put(origen, 0);
+
+            // Algoritmo de Dijkstra
+            while (!nodosVisitados.contains(destino)) {
+                String nodoActual = obtenerNodoMasCercano(distancias, nodosVisitados);
+                if (nodoActual == null) {
+                    // No existe ruta desde el origen al destino
+                    return null;
+                }
+                nodosVisitados.add(nodoActual);
+
+                for (String vecino : grafo.obtenerNodosAdyacentes(nodoActual)) {
+                    int pesoArista = grafo.obtenerPeso(nodoActual, vecino);
+                    int distanciaActual = distancias.get(nodoActual) + pesoArista;
+
+                    if (distanciaActual < distancias.get(vecino)) {
+                        distancias.put(vecino, distanciaActual);
+                        previos.put(vecino, nodoActual);
+                    }
+                }
+            }
+            LinkedList<String> rutaNodos = new LinkedList<>();
+            String nodoActual = destino;
+            while (previos.containsKey(nodoActual)) {
+                rutaNodos.addFirst(nodoActual);
+                nodoActual = previos.get(nodoActual);
+            }
+            rutaNodos.addFirst(origen);
+            return new Ruta(origen, destino, rutaNodos, distancias.get(destino));
+        }
+
+     private String obtenerNodoMasCercano(Map<String, Integer> distancias, Set<String> nodosVisitados) {
+            int distanciaMasCercana = Integer.MAX_VALUE;
+            String nodoMasCercano = null;
+            for (Map.Entry<String, Integer> entry : distancias.entrySet()) {
+                String nodo = entry.getKey();
+                int distancia = entry.getValue();
+
+                if (!nodosVisitados.contains(nodo) && distancia < distanciaMasCercana) {
+                    distanciaMasCercana = distancia;
+                    nodoMasCercano = nodo;
+                }
+            }
+            return nodoMasCercano;
+        }
+
+    private int calcularNivel(String nodo, String origen) { // Corrección 2
+        Map<String, Integer> distancias = new HashMap<>();
+        Map<String, String> previos = new HashMap<>();
+        Set<String> nodosVisitados = new HashSet<>();
+
+        // Inicializar todas las distancias con infinito, excepto el nodo de origen
+        for (String n : grafo.obtenerNodos()) {
+            distancias.put(n, Integer.MAX_VALUE);
+        }
+        distancias.put(origen, 0);
+
+        // Algoritmo de Dijkstra para calcular las distancias
+        while (!nodosVisitados.contains(nodo)) {
+            String nodoActual = obtenerNodoMasCercano(distancias, nodosVisitados);
+            if (nodoActual == null) {
+                // No existe ruta desde el origen al destino
+                return -1;
+            }
+            nodosVisitados.add(nodoActual);
+
+            for (String vecino : grafo.obtenerNodosAdyacentes(nodoActual)) {
+                int pesoArista = grafo.obtenerPeso(nodoActual, vecino);
+                int distanciaActual = distancias.get(nodoActual) + pesoArista;
+
+                if (distanciaActual < distancias.get(vecino)) {
+                    distancias.put(vecino, distanciaActual);
+                    previos.put(vecino, nodoActual);
+                }
+            }
+        }
+
+        return distancias.get(nodo); // Corrección 2
+    }
+   
+    private void graficarArbolB(ArbolB arbolB) {
+    // Generar el código DOT para representar el Árbol B
+    String dotSource = arbolB.generarCodigoDot();
+
+    try {
+        File tempFile = File.createTempFile("arbolB", ".dot");
+        BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile));
+        writer.write(dotSource);
+        writer.close();
+
+        // Ejecutar el comando Graphviz para generar la imagen del Árbol B
+        ProcessBuilder processBuilder = new ProcessBuilder("dot", "-Tpng", "-o", "arbolB.png", tempFile.getAbsolutePath());
+        Process process = processBuilder.start();
+        process.waitFor();
+
+        // Mostrar la imagen del Árbol B en el panel correspondiente
+        mostrarImagen("/path/to/arbolB.png");
+    } catch (IOException | InterruptedException e) {
+        e.printStackTrace();
+    }
+}
+
+
+
+
 private void procesarTrafico(Map<String, Map<String, List<TrafficInfo>>> trafico, StringBuilder dotSource) {
     // Obtener la hora actual (suponiendo que es 14:00)
     int horaActual = 14;
@@ -622,99 +889,6 @@ private void procesarTrafico(Map<String, Map<String, List<TrafficInfo>>> trafico
         }
     }
 }
-
-private int obtenerProbabilidadTrafico(Map<String, Map<String, List<TrafficInfo>>> trafico, String origen, String destino, int horaActual) {
-    if (trafico.containsKey(origen) && trafico.get(origen).containsKey(destino)) {
-        List<TrafficInfo> infoTrafico = trafico.get(origen).get(destino);
-        for (TrafficInfo info : infoTrafico) {
-            if (horaActual >= info.getHoraInicio() && horaActual < info.getHoraFinaliza()) {
-                return info.getProbabilidadTrafico();
-            }
-        }
-    }
-    return 0; // Si no hay tráfico, la probabilidad es 0
-}
-
-private void graficar(Map<String, Map<String, Map<String, Integer>>> distancias, GrafoDirigidoPonderado grafo, String origenSeleccionado, String destinoSeleccionado) {
-    StringBuilder dotSource = new StringBuilder();
-    dotSource.append("digraph G {\n");
-    dotSource.append("  rankdir=LR;\n");  // Cambiar la dirección a de izquierda a derecha
-  // Invertir la dirección a de arriba hacia abajo
-    dotSource.append("  node [shape=oval, style=filled, color=lightgray];\n");
-
-    Map<Integer, List<String>> nivelesNodos = new HashMap<>(); // Corrección 1
-    for (String nodo : grafo.obtenerNodos()) {
-        int nivel = calcularNivel(nodo, origenSeleccionado);
-        if (!nivelesNodos.containsKey(nivel)) {
-            nivelesNodos.put(nivel, new ArrayList<>());
-        }
-        nivelesNodos.get(nivel).add(nodo);
-    }
-
-    for (Integer nivel : nivelesNodos.keySet()) { // Corrección 1
-        dotSource.append("  { rank=same; ");
-        for (String nodo : nivelesNodos.get(nivel)) {
-            dotSource.append("\"" + nodo + "\"; ");
-        }
-        dotSource.append("}\n");
-    }
-
-    for (String origen : distancias.keySet()) {
-        for (String destino : distancias.get(origen).keySet()) {
-            Map<String, Integer> info = distancias.get(origen).get(destino);
-            int tiempoVehiculo = info.get("tiempoVehiculo");
-            int tiempoPie = info.get("tiempoPie");
-            int consumoGas = info.get("consumoGas");
-            int desgastePersona = info.get("desgastePersona");
-            int distancia = info.get("distancia");
-            String label = "Tiempo (vehículo): " + tiempoVehiculo + "\\nTiempo (pie): " + tiempoPie + "\\nConsumo de gas: " + consumoGas + "\\nDesgaste persona: " + desgastePersona + "\\nDistancia: " + distancia;
-            dotSource.append("  \"" + origen + "\" -> \"" + destino + "\" [label=\"" + label + "\"];\n");
-        }
-    }
-    dotSource.append("}\n");
-
-    try {
-        File tempFile = File.createTempFile("graph", ".dot");
-        BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile));
-        writer.write(dotSource.toString());
-        writer.close();
-
-        ProcessBuilder processBuilder = new ProcessBuilder("dot", "-Tpng", "-o", "graph.png", tempFile.getAbsolutePath());
-        Process process = processBuilder.start();
-        process.waitFor();
-        cargarImagenGrafo();
-    } catch (IOException | InterruptedException e) {
-        e.printStackTrace();
-    }
-}
-
-private void graficar(String dotSource, String nombreArchivoDot, String nombreImagen) {
-    try (PrintWriter writer = new PrintWriter(nombreArchivoDot)) {
-        writer.println(dotSource);
-    } catch (FileNotFoundException e) {
-        e.printStackTrace();
-    }
-
-    // Generar la imagen a partir del archivo DOT
-    generarImagenDesdeDot(nombreArchivoDot, nombreImagen);
-}
-
-private void cargarImagenGrafo() {
-    try {
-        ImageIcon icon = new ImageIcon("graph.png");
-        Graficas.removeAll(); // Limpiar el panel antes de agregar la nueva imagen
-        Graficas.setLayout(new BorderLayout());
-        JScrollPane scrollPane = new JScrollPane();
-        JLabel labelImagen = new JLabel(icon);
-        scrollPane.setViewportView(labelImagen);
-        Graficas.add(scrollPane, BorderLayout.CENTER);
-        Graficas.revalidate();
-        Graficas.repaint();
-    } catch (Exception e) {
-        e.printStackTrace();
-    }
-}
-
 private void generarGrafoDOT(Map<String, Map<String, Map<String, Integer>>> distancias, StringBuilder dotSource) {
     for (String origen : distancias.keySet()) {
         for (String destino : distancias.get(origen).keySet()) {
@@ -733,135 +907,28 @@ private void generarGrafoDOT(Map<String, Map<String, Map<String, Integer>>> dist
         }
     }
 }
-
-private void mostrarImagen(String rutaImagen) {
-    ImageIcon imagenIcono = new ImageIcon(rutaImagen);
-    Image imagen = imagenIcono.getImage(); 
-    //aquii se muestra la imagen de los grafos en el panel
-    Image imagenRedimensionada = imagen.getScaledInstance(669, 1456, Image.SCALE_SMOOTH);
-    ImageIcon imagenRedimensionadaIcono = new ImageIcon(imagenRedimensionada); 
-    JLabel imagenLabel = new JLabel(imagenRedimensionadaIcono); 
-    Graficas.removeAll(); 
-    Graficas.add(imagenLabel); 
-    Graficas.revalidate(); 
-    Graficas.repaint(); 
-}
-
-private void generarImagenDesdeDot(String nombreArchivoDot, String nombreImagen) {
-    // Comando para ejecutar Graphviz y generar la imagen
-    String comandoDot = String.format("dot -Tpng -o %s.png %s", nombreImagen, nombreArchivoDot);
-
-    try {
-        // Ejecutar el comando en el sistema
-        Process proceso = Runtime.getRuntime().exec(comandoDot);
-
-        // Esperar a que el proceso termine
-        int exitVal = proceso.waitFor();
-
-        if (exitVal == 0) {
-            System.out.println("Imagen generada correctamente: " + nombreImagen);
-        } else {
-            JOptionPane.showMessageDialog(null, "Error al generar la imagen. Código de salida: " + exitVal);
-        }
-    } catch (IOException | InterruptedException e) {
+private void graficar(String dotSource, String nombreArchivoDot, String nombreImagen) {
+    try (PrintWriter writer = new PrintWriter(nombreArchivoDot)) {
+        writer.println(dotSource);
+    } catch (FileNotFoundException e) {
         e.printStackTrace();
     }
+
+    // Generar la imagen a partir del archivo DOT
+    generarImagenDesdeDot(nombreArchivoDot, nombreImagen);
+}
+private int obtenerProbabilidadTrafico(Map<String, Map<String, List<TrafficInfo>>> trafico, String origen, String destino, int horaActual) {
+    if (trafico.containsKey(origen) && trafico.get(origen).containsKey(destino)) {
+        List<TrafficInfo> infoTrafico = trafico.get(origen).get(destino);
+        for (TrafficInfo info : infoTrafico) {
+            if (horaActual >= info.getHoraInicio() && horaActual < info.getHoraFinaliza()) {
+                return info.getProbabilidadTrafico();
+            }
+        }
+    }
+    return 0; // Si no hay tráfico, la probabilidad es 0
 }
 
- public Ruta calcularRutaMasCorta(String origen, String destino) {
-        Map<String, Integer> distancias = new HashMap<>();
-        Map<String, String> previos = new HashMap<>();
-        Set<String> nodosVisitados = new HashSet<>();
-
-        // Inicializar todas las distancias con infinito, excepto el nodo de origen
-        for (String nodo : grafo.obtenerNodos()) {
-            distancias.put(nodo, Integer.MAX_VALUE);
-        }
-        distancias.put(origen, 0);
-
-        // Algoritmo de Dijkstra
-        while (!nodosVisitados.contains(destino)) {
-            String nodoActual = obtenerNodoMasCercano(distancias, nodosVisitados);
-            if (nodoActual == null) {
-                // No existe ruta desde el origen al destino
-                return null;
-            }
-            nodosVisitados.add(nodoActual);
-
-            for (String vecino : grafo.obtenerNodosAdyacentes(nodoActual)) {
-                int pesoArista = grafo.obtenerPeso(nodoActual, vecino);
-                int distanciaActual = distancias.get(nodoActual) + pesoArista;
-
-                if (distanciaActual < distancias.get(vecino)) {
-                    distancias.put(vecino, distanciaActual);
-                    previos.put(vecino, nodoActual);
-                }
-            }
-        }
-
-        // Construir la ruta a partir de los nodos previos
-        LinkedList<String> rutaNodos = new LinkedList<>();
-        String nodoActual = destino;
-        while (previos.containsKey(nodoActual)) {
-            rutaNodos.addFirst(nodoActual);
-            nodoActual = previos.get(nodoActual);
-        }
-        rutaNodos.addFirst(origen);
-
-        // Crear la instancia de Ruta y devolverla
-        return new Ruta(origen, destino, rutaNodos, distancias.get(destino));
-    }
-
- private String obtenerNodoMasCercano(Map<String, Integer> distancias, Set<String> nodosVisitados) {
-        int distanciaMasCercana = Integer.MAX_VALUE;
-        String nodoMasCercano = null;
-
-        for (Map.Entry<String, Integer> entry : distancias.entrySet()) {
-            String nodo = entry.getKey();
-            int distancia = entry.getValue();
-
-            if (!nodosVisitados.contains(nodo) && distancia < distanciaMasCercana) {
-                distanciaMasCercana = distancia;
-                nodoMasCercano = nodo;
-            }
-        }
-
-        return nodoMasCercano;
-    }
-
-private int calcularNivel(String nodo, String origen) { // Corrección 2
-    Map<String, Integer> distancias = new HashMap<>();
-    Map<String, String> previos = new HashMap<>();
-    Set<String> nodosVisitados = new HashSet<>();
-
-    // Inicializar todas las distancias con infinito, excepto el nodo de origen
-    for (String n : grafo.obtenerNodos()) {
-        distancias.put(n, Integer.MAX_VALUE);
-    }
-    distancias.put(origen, 0);
-
-    // Algoritmo de Dijkstra para calcular las distancias
-    while (!nodosVisitados.contains(nodo)) {
-        String nodoActual = obtenerNodoMasCercano(distancias, nodosVisitados);
-        if (nodoActual == null) {
-            // No existe ruta desde el origen al destino
-            return -1;
-        }
-        nodosVisitados.add(nodoActual);
-
-        for (String vecino : grafo.obtenerNodosAdyacentes(nodoActual)) {
-            int pesoArista = grafo.obtenerPeso(nodoActual, vecino);
-            int distanciaActual = distancias.get(nodoActual) + pesoArista;
-
-            if (distanciaActual < distancias.get(vecino)) {
-                distancias.put(vecino, distanciaActual);
-                previos.put(vecino, nodoActual);
-            }
-        }
-    }
-
-    return distancias.get(nodo); // Corrección 2
-}
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Aplicar;
@@ -870,6 +937,9 @@ private int calcularNivel(String nodo, String origen) { // Corrección 2
     private javax.swing.JButton Archivo2;
     private javax.swing.JTextField ControlReloj;
     private javax.swing.JComboBox<String> Destino;
+    private javax.swing.JTextField Distancia;
+    private javax.swing.JTextField Fisico;
+    private javax.swing.JTextField Gas;
     private javax.swing.JPanel Graficas;
     private javax.swing.JTextField Historial;
     private javax.swing.JButton NuevoViaje;
@@ -893,8 +963,5 @@ private int calcularNivel(String nodo, String origen) { // Corrección 2
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
     // End of variables declaration//GEN-END:variables
 }
